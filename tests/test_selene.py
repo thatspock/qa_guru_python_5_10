@@ -1,6 +1,9 @@
 import allure
 from selene import browser, by, be
 
+from page_objects.allure_steps import AllureSteps
+from tests.config import REPOSITORY, ISSUE_NUMBER
+
 
 def test_github_selene():
     browser.open('/')
@@ -28,33 +31,9 @@ def test_github_steps():
 
 
 def test_github_decorator_steps():
-    open_main_page()
-    search_for_repository('eroshenkoam/allure-example')
-    go_to_repository('eroshenkoam/allure-example')
-    go_to_issue_tab()
-    find_issue_by_text('81')
-
-
-@allure.step('Open main page')
-def open_main_page():
-    browser.open('/')
-
-
-@allure.step('Find github repository {repo}')
-def search_for_repository(repo):
-    browser.element('.header-search-input').type(repo).submit()
-
-
-@allure.step('Click on repository link {repo}')
-def go_to_repository(repo):
-    browser.element(by.link_text(repo)).click()
-
-
-@allure.step('Click on issue tab')
-def go_to_issue_tab():
-    browser.element('#issues-tab').click()
-
-
-@allure.step('Find issue #{number} by text')
-def find_issue_by_text(number):
-    browser.element(by.partial_text(f'#{number}')).should(be.visible)
+    allure_steps = AllureSteps()
+    allure_steps.open_main_page()
+    allure_steps.search_for_repository(REPOSITORY)
+    allure_steps.go_to_repository(REPOSITORY)
+    allure_steps.go_to_issue_tab()
+    allure_steps.find_issue_by_text(ISSUE_NUMBER)
